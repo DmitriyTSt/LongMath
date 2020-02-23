@@ -29,9 +29,9 @@ fun testBuildIn() {
 
 fun testCustom() {
     val startTime = System.currentTimeMillis()
-    val a = CustomBigInt("2")
-    val b = CustomBigInt("-1")
-    val c = a + b
+    val a = CustomBigInt("-2234789473924920479202")
+    val b = CustomBigInt("-3324342578934257893442")
+    val c = a - b
     println(c)
     println("Custom ${System.currentTimeMillis() - startTime} ms")
 }

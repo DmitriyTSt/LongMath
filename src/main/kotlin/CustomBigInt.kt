@@ -23,15 +23,15 @@ class CustomBigInt(val str: String) {
     }
 
     operator fun plus(number: CustomBigInt): CustomBigInt {
-        if (!this.negative && !number.negative) {
-            return sumPositive(this, number)
+        return if (!this.negative && !number.negative) {
+            sumPositive(this, number)
         } else if (this.negative && number.negative) {
-            return sumPositive(this, number, true)
+            sumPositive(this, number, true)
         } else {
-            return if (this.negative) {
-                number - this
+            if (this.negative) {
+                minusPositive(number, this)
             } else {
-                this - number
+                minusPositive(this, number)
             }
         }
     }
@@ -58,7 +58,17 @@ class CustomBigInt(val str: String) {
     }
 
     operator fun minus(number: CustomBigInt): CustomBigInt {
-        return minusPositive(this, number)
+        return if (!this.negative && !number.negative) {
+            minusPositive(this, number)
+        } else if (this.negative && number.negative) {
+            minusPositive(number, this)
+        } else {
+            if (this.negative) {
+                sumPositive(this, number, true)
+            } else {
+                sumPositive(this, number)
+            }
+        }
     }
 
     private fun minusPositive(a: CustomBigInt, b: CustomBigInt): CustomBigInt {
@@ -83,7 +93,7 @@ class CustomBigInt(val str: String) {
             }
         }
         if (k == -1) {
-            val c = b - this
+            val c = minusPositive(b, a)
             c.negative = true
             return c
         } else {
