@@ -1,6 +1,8 @@
-class CustomBigInt(val str: String) {
+class CustomBigInt(str: String) {
     companion object {
-        private const val BASE = 10
+        private const val BASE = 1000000000
+        private const val DEFAULT_BASE = 10
+        private const val BASE_KOEF = 9
     }
 
     private val value: ArrayList<Int> = ArrayList()
@@ -13,12 +15,20 @@ class CustomBigInt(val str: String) {
         } else {
             str
         }
+        var buf = StringBuilder()
         unsignedStr.reversed().forEach {
             try {
-                value.add(it.toString().toInt())
+                buf.append(it.toString())
+                if (buf.length == BASE_KOEF) {
+                    value.add(buf.toString().reversed().toInt())
+                    buf = StringBuilder()
+                }
             } catch (e: NumberFormatException) {
                 java.lang.NumberFormatException("Skip error char '$it'").printStackTrace()
             }
+        }
+        if (buf.isNotEmpty()) {
+            value.add(buf.toString().reversed().toInt())
         }
     }
 
@@ -109,7 +119,7 @@ class CustomBigInt(val str: String) {
     }
 
     override fun toString(): String {
-        return (if (negative) "-" else "") + value.joinToString("").reversed()
+        return (if (negative) "-" else "") + value.map { it.toString().reversed() }.joinToString("").reversed()
     }
 
 }
