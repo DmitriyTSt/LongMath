@@ -15,13 +15,13 @@ class CustomBigInt(str: String) {
         } else {
             str
         }
-        var buf = StringBuilder()
+        val buf = StringBuilder()
         unsignedStr.reversed().forEach {
             try {
                 buf.append(it.toString())
                 if (buf.length == BASE_KOEF) {
                     value.add(buf.toString().reversed().toInt())
-                    buf = StringBuilder()
+                    buf.setLength(0)
                 }
             } catch (e: NumberFormatException) {
                 java.lang.NumberFormatException("Skip error char '$it'").printStackTrace()
