@@ -1,7 +1,29 @@
 import java.math.BigInteger
 
 fun main() {
-    timeTest()
+    consoleRun()
+}
+
+fun consoleRun() {
+    println("Введите чисто a")
+
+    var str = readLine() ?: ""
+    while (!str.contains(Regex("^[-]?[0-9]+$"))) {
+        println("Incorrect big number")
+        str = readLine() ?: ""
+    }
+    val a = CustomBigInt(str)
+    val aBuildIn = BigInteger(str)
+    println("Введите чисто b")
+    str = readLine() ?: ""
+    while (!str.contains(Regex("^[-]?[0-9]+$"))) {
+        println("Incorrect big number")
+        str = readLine() ?: ""
+    }
+    val b = CustomBigInt(str)
+    val bBuildIn = BigInteger(str)
+    println("a + b = ${a + b} check with buildIn: ${(a + b).toString() == (aBuildIn + bBuildIn).toString()}")
+    println("a - b = ${a - b} check with buildIn: ${(a - b).toString() == (aBuildIn - bBuildIn).toString()}")
 }
 
 fun timeTest() {
