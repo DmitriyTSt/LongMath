@@ -1,5 +1,7 @@
 import java.math.BigInteger
 
+// variant 1
+
 fun main() {
     consoleRun()
 }
@@ -22,8 +24,20 @@ fun consoleRun() {
     }
     val b = CustomBigInt(str)
     val bBuildIn = BigInteger(str)
-    println("a + b = ${a + b} check with buildIn: ${(a + b).toString() == (aBuildIn + bBuildIn).toString()}")
-    println("a - b = ${a - b} check with buildIn: ${(a - b).toString() == (aBuildIn - bBuildIn).toString()}")
+    val sumTrue = (a + b).toString() == (aBuildIn + bBuildIn).toString()
+    println("a + b = ${a + b} check with buildIn: $sumTrue")
+    if (!sumTrue) {
+        println("${a + b} vs ${aBuildIn + bBuildIn}")
+    }
+    val minusTrue = (a - b).toString() == (aBuildIn - bBuildIn).toString()
+    println("a - b = ${a - b} check with buildIn: $minusTrue")
+    if (!minusTrue) {
+        println("${a - b} vs ${aBuildIn - bBuildIn}")
+    }
+    // 2376493264986492376498237649362927369234 = a
+    // 3465932654986923376298467239864729364792384 = b
+    // 34635561617219368839219692215366437423150
+    // 3463556161721936883921969002215366437423150
 }
 
 fun timeTest() {

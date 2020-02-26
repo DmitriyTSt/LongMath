@@ -119,7 +119,17 @@ class CustomBigInt(str: String) {
     }
 
     override fun toString(): String {
-        return (if (negative) "-" else "") + value.map { it.toString().reversed() }.joinToString("").reversed()
+        val notNormalized = (if (negative) "-" else "") +
+                value.joinToString("") { "%0${BASE_KOEF}d".format(it).reversed() }.reversed()
+        val normalized = StringBuilder(notNormalized)
+        var i = 0
+        if (normalized[i] == '-') {
+            i++
+        }
+        while (normalized[i] == '0') {
+            normalized.deleteCharAt(i)
+        }
+        return String(normalized)
     }
 
 }
