@@ -111,6 +111,29 @@ class CustomBigInt(str: String) {
         }
     }
 
+    operator fun times(number: CustomBigInt): CustomBigInt {
+        return mulPositive(this, number, this.negative != number.negative)
+    }
+
+    private fun mulPositive(a: CustomBigInt, b: CustomBigInt, negative: Boolean = false): CustomBigInt {
+        val ans = CustomBigInt("")
+        repeat(a.value.size + b.value.size) {
+            ans.value.add(0)
+        }
+        repeat(a.value.size) {
+            var i = 0
+            var k = 0
+            do {
+                val t = 1L * a.value[i] * b.value[it] + ans.value[i + it] + k
+                ans.value[i + it] = (t % BASE.toLong()).toInt()
+                k = (t / BASE.toLong()).toInt()
+                i++
+            } while (i < b.value.size)
+            ans.value[it + b.value.size] = k
+        }
+        return ans.normalized()
+    }
+
     private fun normalized(): CustomBigInt {
         while (value.size > 1 && value[value.lastIndex] == 0) {
             value.removeAt(value.lastIndex)
@@ -126,7 +149,7 @@ class CustomBigInt(str: String) {
         if (normalized[i] == '-') {
             i++
         }
-        while (normalized[i] == '0') {
+        while (normalized.length > 1 && normalized[i] == '0') {
             normalized.deleteCharAt(i)
         }
         return String(normalized)
