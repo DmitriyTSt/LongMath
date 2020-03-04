@@ -131,6 +131,7 @@ class CustomBigInt(str: String) {
             } while (i < b.value.size)
             ans.value[it + b.value.size] = k
         }
+        ans.negative = negative
         return ans.normalized()
     }
 
