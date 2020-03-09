@@ -39,6 +39,16 @@ fun consoleRun() {
     if (!mulTrue) {
         println("${a * b} vs ${aBuildIn * bBuildIn}")
     }
+    val divTrue = (a / b).toString() == (aBuildIn / bBuildIn).toString()
+    println("a / b = ${a / b} check with buildIn: $divTrue")
+    if (!divTrue) {
+        println("${a / b} vs ${aBuildIn / bBuildIn}")
+    }
+    val modTrue = (a % b).toString() == (aBuildIn % bBuildIn).toString()
+    println("a % b = ${a % b} check with buildIn: $modTrue")
+    if (!modTrue) {
+        println("${a % b} vs ${aBuildIn % bBuildIn}")
+    }
     // 2376493264986492376498237649362927369234 = a
     // 3465932654986923376298467239864729364792384 = b
     // 34635561617219368839219692215366437423150
