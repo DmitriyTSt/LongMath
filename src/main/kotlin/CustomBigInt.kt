@@ -203,22 +203,18 @@ class CustomBigInt(str: String = "") {
             tempBig -= temp
             flagNegative = tempBig.negative == true
             if (flagNegative) {
-                // u[j+n..j] += b^(n-1)
-                // возвращаем обратно
+                // u[j+n..j] += b^(n+1)
+                // создаем B
+                val tempBinPower = CustomBigInt()
+                tempBinPower.value.clear()
                 repeat(n + 1) {
-                    u.value[it + j] +=
-                            temp.value[it]
+                    tempBinPower.value.add(0)
                 }
-                val tempBig = CustomBigInt()
-                tempBig.value.clear()
+                tempBinPower.value.add(1)
+                // Прибавляем к орицательному числу B
+                tempBig += tempBinPower
                 repeat(n + 1) {
-                    tempBig.value.add(u.value[it + j])
-                }
-                tempBig.value.add(1)
-                // tempBig is part u + b^(n+1)
-                val res = tempBig - temp
-                repeat(n + 1) {
-                    u.value[it + j] = res.value[it]
+                    u.value[it + j] = tempBig.value[it]
                 }
             } else {
                 while (tempBig.value.size < n + 1) {
