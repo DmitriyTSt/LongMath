@@ -3,12 +3,11 @@ import java.math.BigInteger
 // variant 1
 
 fun main() {
-    consoleRun()
+    timeTest()
 }
 
 fun consoleRun() {
-    println("Введите чисто a")
-
+    println("Введите число a")
     var str = readLine() ?: ""
     while (!str.contains(Regex("^[-]?[0-9]+$"))) {
         println("Incorrect big number")
@@ -16,7 +15,7 @@ fun consoleRun() {
     }
     val a = CustomBigInt(str)
     val aBuildIn = BigInteger(str)
-    println("Введите чисто b")
+    println("Введите число b")
     str = readLine() ?: ""
     while (!str.contains(Regex("^[-]?[0-9]+$"))) {
         println("Incorrect big number")
@@ -73,7 +72,7 @@ fun testBuildIn() {
     val startTime1 = System.currentTimeMillis()
     val a1 = BigInteger("123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788")
     val b1 = BigInteger("123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789")
-    val c1 = a1 * b1
+    val c1 = a1 / b1
     println(c1)
     println("BuildIn ${System.currentTimeMillis() - startTime1} ms")
 }
@@ -82,7 +81,7 @@ fun testCustom() {
     val startTime = System.currentTimeMillis()
     val a = CustomBigInt("123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788")
     val b = CustomBigInt("123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789")
-    val c = a * b
+    val c = a / b
     println(c)
     println("Custom ${System.currentTimeMillis() - startTime} ms")
 }
