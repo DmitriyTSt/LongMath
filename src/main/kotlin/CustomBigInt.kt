@@ -32,6 +32,9 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Переопределенная операция "+", согласовывающая знак числа
+     */
     operator fun plus(number: CustomBigInt): CustomBigInt {
         return if (!this.negative && !number.negative) {
             sumPositive(this, number)
@@ -46,8 +49,12 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Алгоритм сложения положительных чисел по Кнуту
+     */
     private fun sumPositive(a: CustomBigInt, b: CustomBigInt, negative: Boolean = false): CustomBigInt {
         val ans = CustomBigInt()
+        // добиваем числа до одинакового количества разрядов
         if (a.value.size < b.value.size) {
             repeat(b.value.size - a.value.size) {
                 a.value.add(0)
@@ -59,17 +66,22 @@ class CustomBigInt(str: String = "") {
         }
         var k = 0
         repeat(a.value.size) {
+            // складываем разряды и следим за переносом в k
             ans.value.add((a.value[it] + b.value[it] + k) % BASE)
             k = (a.value[it] + b.value[it] + k) / BASE
         }
         ans.value.add(k)
         ans.negative = negative
+        // нормализуем все числа для возможного дальнейшего использования
         a.normalize()
         b.normalize()
         ans.normalize()
         return ans
     }
 
+    /**
+     * Переопределенная операция "-", согласовывающая знак числа
+     */
     operator fun minus(number: CustomBigInt): CustomBigInt {
         return if (!this.negative && !number.negative) {
             minusPositive(this, number)
@@ -84,8 +96,12 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Алгоритм вычитания положительных чисел по Кнуту
+     */
     private fun minusPositive(a: CustomBigInt, b: CustomBigInt): CustomBigInt {
         val ans = CustomBigInt()
+        // добиваем числа до одинакового количества разрядов
         if (a.value.size < b.value.size) {
             repeat(b.value.size - a.value.size) {
                 a.value.add(0)
@@ -97,6 +113,7 @@ class CustomBigInt(str: String = "") {
         }
         var k = 0
         repeat(a.value.size) {
+            // проивзодим вычитание разрядов и следим за заимствованием в k
             ans.value.add(a.value[it] - b.value[it] + k)
             if (ans.value.last() < 0) {
                 ans.value[ans.value.lastIndex] += BASE
@@ -105,8 +122,10 @@ class CustomBigInt(str: String = "") {
                 k = 0
             }
         }
+        // нормализуем все числа для возможного дальнейшего использования
         a.normalize()
         b.normalize()
+        // если алгоритм закончен а заимствование осталось, то число отрицательное, проведем вычитание с нужным знаком
         if (k == -1) {
             val c = minusPositive(b, a)
             c.negative = true
@@ -117,15 +136,23 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Переопределенная операция "*", согласовывающая знак числа
+     */
     operator fun times(number: CustomBigInt): CustomBigInt {
         return mulPositive(this, number, this.negative != number.negative)
     }
 
+    /**
+     * Алгоритм умножения положительных чисел по Кнуту
+     */
     private fun mulPositive(a: CustomBigInt, b: CustomBigInt, negative: Boolean = false): CustomBigInt {
         val ans = CustomBigInt()
+        // создаем нужное количество разрядов в ответе
         repeat(a.value.size + b.value.size + 1) {
             ans.value.add(0)
         }
+        // проводим алгоритм умножения по нужным разрядам, следя за переносом в k
         repeat(a.value.size) {
             var i = 0
             var k = 0
@@ -146,6 +173,9 @@ class CustomBigInt(str: String = "") {
         return ans
     }
 
+    /**
+     * Переопределнная операция "/", согласовывающая знак числа и разные виды деления
+     */
     operator fun div(number: CustomBigInt): CustomBigInt {
         return if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative)
@@ -154,6 +184,9 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Переопределнная операция "%", согласовывающая знак числа и разные виды деления
+     */
     operator fun rem(number: CustomBigInt): CustomBigInt {
         return if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative, false)
@@ -162,10 +195,16 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Алгоритм деления положительных чисел по Кнуту
+     * isDiv = true : брать результат деления
+     * isDiv = false : брать остаток деления
+     */
     private fun divModPositive(a: CustomBigInt, b: CustomBigInt, negative: Boolean = false, isDiv: Boolean = true): CustomBigInt {
         if (b.value.size == 1) {
             throw Exception("not implemented div by n == 1")
         }
+        // нормализуем числа
         val d = BASE / (b.value.last() + 1)
         var u = a
         var v = b
@@ -178,18 +217,22 @@ class CustomBigInt(str: String = "") {
         }
 
         val ans = CustomBigInt()
+        // создаем нужное количество разрядов в ответе
         repeat(m + 1) {
             ans.value.add(0)
         }
         var j = m
         do {
+            // вычисляем предполагаемое частное и остаток
             var q = (u.value[j + n] * BASE + u.value[j + n - 1]) / v.value.last()
             var r = (u.value[j + n] * BASE + u.value[j + n - 1]) % v.value.last()
 
+            // Корректируем предполагаемые значения
             while ((q == BASE || q * v.value[n - 2] > BASE * r + u.value[j + n - 2]) && r < BASE) {
                 q--
                 r += v.value[n - 1]
             }
+            // Создаем новое число чтобы корретно проводить вычисления в шаге D4
             val temp = CustomBigInt(q.toString()) * v
             while (temp.value.size < n + 1) {
                 temp.value.add(0)
@@ -202,6 +245,7 @@ class CustomBigInt(str: String = "") {
             }
             tempBig -= temp
             flagNegative = tempBig.negative == true
+            // если получили отрицательный результат, добавим BASE^(n+1)
             if (flagNegative) {
                 // u[j+n..j] += b^(n+1)
                 // создаем B
@@ -224,7 +268,9 @@ class CustomBigInt(str: String = "") {
                     u.value[it + j] = tempBig.value[it]
                 }
             }
+            // пишем найденное значение в ответ
             ans.value[j] = q
+            // компенсируем сложение, если это необходимо (D6)
             if (flagNegative) {
                 // if flag negative D6
                 ans.value[j]--
@@ -243,6 +289,7 @@ class CustomBigInt(str: String = "") {
         } while (j >= 0)
         ans.negative = negative
         ans.normalize()
+        // возвращаем или результат деления или остаток
         return if (isDiv) {
             ans
         } else {
@@ -255,6 +302,9 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Алгоритм деления на короткое число
+     */
     private fun divModShort(number: Int, negative: Boolean, isDiv: Boolean = true): CustomBigInt {
         val ans = CustomBigInt()
         repeat(this.value.size) {
@@ -276,6 +326,9 @@ class CustomBigInt(str: String = "") {
         }
     }
 
+    /**
+     * Убираем незначащие нули
+     */
     private fun normalize() {
         while (value.size > 1 && value[value.lastIndex] == 0) {
             value.removeAt(value.lastIndex)
