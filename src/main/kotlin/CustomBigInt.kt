@@ -177,7 +177,9 @@ class CustomBigInt(str: String = "") {
      * Переопределнная операция "/", согласовывающая знак числа и разные виды деления
      */
     operator fun div(number: CustomBigInt): CustomBigInt {
-        return if (number.value.size == 1) {
+        return if (this < number) {
+            CustomBigInt("0")
+        } else if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative)
         } else {
             divModPositive(this, number, this.negative != number.negative)
@@ -188,7 +190,9 @@ class CustomBigInt(str: String = "") {
      * Переопределнная операция "%", согласовывающая знак числа и разные виды деления
      */
     operator fun rem(number: CustomBigInt): CustomBigInt {
-        return if (number.value.size == 1) {
+        return if (this < number) {
+            this
+        } else if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative, false)
         } else {
             divModPositive(this, number, this.negative != number.negative, false)
@@ -327,6 +331,73 @@ class CustomBigInt(str: String = "") {
     }
 
     /**
+     * Алгоритм бинарного возведения в степень согласно Кнуту
+     */
+    fun pow(power: CustomBigInt): CustomBigInt {
+        // инициализируем начальные значения
+        var n = power
+        var y = CustomBigInt("1")
+        var z = this
+        while (n != CustomBigInt("0")) {
+            // проводим действия с n согласно шагу A4
+            val isEven = (n % CustomBigInt("2")) == CustomBigInt("0")
+            n /= CustomBigInt("2")
+            if (!isEven) {
+                y *= z /* A3 */
+                // A4
+                if (n == CustomBigInt("0")) {
+                    return y
+                }
+            }
+            z *= z /* A5 */
+        }
+        // хотя алгоритм и так корректно завершится на шаге A4, для компиляции нужно поставить какой-нибудь return
+        return y
+    }
+
+    /**
+     * Переопределенная операция сравнения, учитывающая знаки чисел
+     */
+    operator fun compareTo(value: CustomBigInt): Int {
+        return if (this.negative == value.negative) {
+            if (this.negative) {
+                -comparePositive(this, value)
+            } else {
+                comparePositive(this, value)
+            }
+        } else {
+            if (this.negative) {
+                -1
+            } else {
+                1
+            }
+        }
+    }
+
+    /**
+     * Сравнение двух положительных чисел по разрядам начиная с большего
+     */
+    private fun comparePositive(a: CustomBigInt, b: CustomBigInt): Int {
+        return if (a.value.size == b.value.size) {
+            var i = a.value.lastIndex
+            while (i >= 0 && a.value[i] == b.value[i]) {
+                i--
+            }
+            if (i < 0) {
+                0
+            } else {
+                a.value[i].compareTo(b.value[i])
+            }
+        } else {
+            if (a.value.size < b.value.size) {
+                -1
+            } else {
+                1
+            }
+        }
+    }
+
+    /**
      * Убираем незначащие нули
      */
     private fun normalize() {
@@ -347,6 +418,10 @@ class CustomBigInt(str: String = "") {
             normalized.deleteCharAt(i)
         }
         return String(normalized)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return this.toString() == other.toString()
     }
 
 }

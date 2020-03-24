@@ -49,6 +49,11 @@ fun consoleRun() {
     if (!modTrue) {
         println("${a % b} vs ${aBuildIn % bBuildIn}")
     }
+    val powerTrue = (a.pow(b)).toString() == (aBuildIn.pow(bBuildIn.toInt())).toString()
+    println("a ^ b = ${a.pow(b)} check with buildIn: $powerTrue")
+    if (!powerTrue) {
+        println("${a.pow(b)} vs ${aBuildIn.pow(bBuildIn.toInt())}")
+    }
     // 2376493264986492376498237649362927369234 = a
     // 3465932654986923376298467239864729364792384 = b
     // 34635561617219368839219692215366437423150
