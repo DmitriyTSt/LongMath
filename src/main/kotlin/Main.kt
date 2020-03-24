@@ -3,7 +3,10 @@ import java.math.BigInteger
 // variant 1
 
 fun main() {
+    // для проверки результатов раскомментируйте consoleRun()
     consoleRun()
+    // для проверки времени выполнения раскомментируйте timeTest()
+//    timeTest()
 }
 
 fun consoleRun() {
@@ -24,70 +27,68 @@ fun consoleRun() {
     }
     val b = CustomBigInt(str)
     val bBuildIn = BigInteger(str)
+
+    /**
+     * Далее идут блоки для проверки действий, если какое-то не нужно - закомментируйте
+     */
+
+    // сложение
     val sumTrue = (a + b).toString() == (aBuildIn + bBuildIn).toString()
     println("a + b = ${a + b} check with buildIn: $sumTrue")
     if (!sumTrue) {
         println("${a + b} vs ${aBuildIn + bBuildIn}")
     }
+    // вычитание
     val minusTrue = (a - b).toString() == (aBuildIn - bBuildIn).toString()
     println("a - b = ${a - b} check with buildIn: $minusTrue")
     if (!minusTrue) {
         println("${a - b} vs ${aBuildIn - bBuildIn}")
     }
+    // умножение
     val mulTrue = (a * b).toString() == (aBuildIn * bBuildIn).toString()
     println("a * b = ${a * b} check with buildIn: $mulTrue")
     if (!mulTrue) {
         println("${a * b} vs ${aBuildIn * bBuildIn}")
     }
+    // деление
     val divTrue = (a / b).toString() == (aBuildIn / bBuildIn).toString()
     println("a / b = ${a / b} check with buildIn: $divTrue")
     if (!divTrue) {
         println("${a / b} vs ${aBuildIn / bBuildIn}")
     }
+    // остаток
     val modTrue = (a % b).toString() == (aBuildIn % bBuildIn).toString()
     println("a % b = ${a % b} check with buildIn: $modTrue")
     if (!modTrue) {
         println("${a % b} vs ${aBuildIn % bBuildIn}")
     }
+    // степень
     val powerTrue = (a.pow(b)).toString() == (aBuildIn.pow(bBuildIn.toInt())).toString()
     println("a ^ b = ${a.pow(b)} check with buildIn: $powerTrue")
     if (!powerTrue) {
         println("${a.pow(b)} vs ${aBuildIn.pow(bBuildIn.toInt())}")
     }
-    // 2376493264986492376498237649362927369234 = a
-    // 3465932654986923376298467239864729364792384 = b
-    // 34635561617219368839219692215366437423150
-    // 3463556161721936883921969002215366437423150
 }
 
 fun timeTest() {
     testBuildIn()
     testCustom()
-    testBuildIn()
-    testCustom()
-    testBuildIn()
-    testBuildIn()
-    testBuildIn()
-    testBuildIn()
-    testCustom()
-    testCustom()
-    testCustom()
 }
 
 fun testBuildIn() {
     val startTime1 = System.currentTimeMillis()
-    val a1 = BigInteger("123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788")
-    val b1 = BigInteger("123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789")
-    val c1 = a1 * b1
+    val a1 = BigInteger("1234567890")
+    val b1 = BigInteger("123")
+    val c1 = a1.pow(b1.toInt())
     println(c1)
     println("BuildIn ${System.currentTimeMillis() - startTime1} ms")
 }
 
 fun testCustom() {
     val startTime = System.currentTimeMillis()
-    val a = CustomBigInt("123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788123456788")
-    val b = CustomBigInt("123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789")
-    val c = a * b
+    val a = CustomBigInt("1234567890")
+    val b = CustomBigInt("123")
+    val c = a.pow(b)
     println(c)
     println("Custom ${System.currentTimeMillis() - startTime} ms")
 }

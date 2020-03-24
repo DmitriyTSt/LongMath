@@ -177,7 +177,10 @@ class CustomBigInt(str: String = "") {
      * Переопределнная операция "/", согласовывающая знак числа и разные виды деления
      */
     operator fun div(number: CustomBigInt): CustomBigInt {
-        return if (this < number) {
+        if (number == CustomBigInt("0")) {
+            println("На ноль делить нельзя")
+            return CustomBigInt()
+        } else return if (this < number) {
             CustomBigInt("0")
         } else if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative)
@@ -190,7 +193,10 @@ class CustomBigInt(str: String = "") {
      * Переопределнная операция "%", согласовывающая знак числа и разные виды деления
      */
     operator fun rem(number: CustomBigInt): CustomBigInt {
-        return if (this < number) {
+        if (number == CustomBigInt("0")) {
+            println("На ноль делить нельзя")
+            return CustomBigInt()
+        } else return if (this < number) {
             this
         } else if (number.value.size == 1) {
             divModShort(number.value.first(), this.negative != number.negative, false)
@@ -411,7 +417,7 @@ class CustomBigInt(str: String = "") {
                 value.joinToString("") { "%0${BASE_KOEF}d".format(it).reversed() }.reversed()
         val normalized = StringBuilder(notNormalized)
         var i = 0
-        if (normalized[i] == '-') {
+        if (i > 0 && normalized[i] == '-') {
             i++
         }
         while (normalized.length > 1 && normalized[i] == '0') {
