@@ -4,11 +4,6 @@ import java.math.BigInteger
 
 fun main() {
     // для проверки результатов раскомментируйте consoleRun()
-    /**
-     *
-     * Внимание при проверке степени! Readme: Конец функции consoleRun
-     *
-     */
     consoleRun()
     // для проверки времени выполнения раскомментируйте timeTest()
 //    timeTest()
@@ -67,23 +62,8 @@ fun consoleRun() {
     if (!modTrue) {
         println("${a % b} vs ${aBuildIn % bBuildIn}")
     }
-    // степень с проверкой со встроенными большими числами
-    /**
-     * Стоит отметить что встроенная длинная арифметика проверяется только тогда, когда второе число короткое
-     * Для запуска подсчета возведения в длинную степень, используйте закомментированный код ниже,
-     * а этот наоборот закомментируйте
-     */
-    val powerTrue = (a.pow(b)).toString() == (aBuildIn.pow(bBuildIn.toInt())).toString()
-    println("a ^ b = ${a.pow(b)} check with buildIn: $powerTrue")
-    if (!powerTrue) {
-        println("${a.pow(b)} vs ${aBuildIn.pow(bBuildIn.toInt())}")
-    }
-    /**
-     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * Степень без проверки
-     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     */
-    println("a ^ b = ${a.pow(b)}")
+    // степень
+    println("a ^ b = ${a.pow(b, CustomBigInt("1000000000000000000"))}") // mod = 10^16
 }
 
 fun timeTest() {
@@ -104,7 +84,7 @@ fun testCustom() {
     val startTime = System.currentTimeMillis()
     val a = CustomBigInt("1234567890")
     val b = CustomBigInt("123")
-    val c = a.pow(b)
+    val c = a.pow(b, CustomBigInt("1000000000000000000"))
     println(c)
     println("Custom ${System.currentTimeMillis() - startTime} ms")
 }

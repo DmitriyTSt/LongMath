@@ -339,7 +339,7 @@ class CustomBigInt(str: String = "") {
     /**
      * Алгоритм бинарного возведения в степень согласно Кнуту
      */
-    fun pow(power: CustomBigInt): CustomBigInt {
+    fun pow(power: CustomBigInt, mod: CustomBigInt): CustomBigInt {
         // инициализируем начальные значения
         var n = power
         var y = CustomBigInt("1")
@@ -349,13 +349,13 @@ class CustomBigInt(str: String = "") {
             val isEven = (n % CustomBigInt("2")) == CustomBigInt("0")
             n /= CustomBigInt("2")
             if (!isEven) {
-                y *= z /* A3 */
+                y = (y * z) % mod /* A3 */
                 // A4
                 if (n == CustomBigInt("0")) {
                     return y
                 }
             }
-            z *= z /* A5 */
+            z = (z * z) % mod /* A5 */
         }
         // хотя алгоритм и так корректно завершится на шаге A4, для компиляции нужно поставить какой-нибудь return
         return y
